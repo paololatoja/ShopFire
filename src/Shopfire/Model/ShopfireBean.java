@@ -28,14 +28,26 @@ public class ShopfireBean implements ShopfireOnlineOrdering{
 	@Override
 	public void validateCreditCard() {
 		if(creditCard.length() == 16) {
-//			if(Luhn algorithm passed) {
-//				cardStatus = true;
-//			}
+			int s1 = 0, s2 = 0;
+	        String reverse = new StringBuffer(creditCard).reverse().toString();
+	        
+	        for(int i = 0 ;i < reverse.length();i++) {
+	            int digit = Character.digit(reverse.charAt(i), 10);
+	            
+	            if(i % 2 == 0) {	//this is for odd digits, they are 1-indexed in the algorithm
+	                s1 += digit;
+	                
+	            } else {	
+	                s2 += 2 * digit;	//add 2 * digit for 0-4, add 2 * digit - 9 for 5-9
+	                
+	                if(digit >= 5){
+	                    s2 -= 9;
+	                }
+	            }
+	        }
+	        cardStatus = (s1 + s2) % 10 == 0;  //true or false
 			// default is cardStatus = false
 		}
-		//Luhn algorithm
-		//https://rosettacode.org/wiki/Luhn_test_of_credit_card_numbers
-		//credit card number must be 16 digits (Philippine standard) and passed the LUHN or Modulus 10 algorithm
 	}
 	
 	@Override
@@ -59,12 +71,12 @@ public class ShopfireBean implements ShopfireOnlineOrdering{
 	
 	@Override
 	public void netPay() {
-		
+		// Gross pay + VAT
 	}
 	
 	@Override
 	public void printPDFSalesReport() {
-		
+		// pdf receipt
 	}
 	
 	
